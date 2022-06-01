@@ -3,6 +3,7 @@ const cookieParser = require("cookie-parser")
 const path = require('path')
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose');
+const { log } = require('console');
 require("dotenv").config()
 
 const app = express()
@@ -25,6 +26,7 @@ async function usernameCheck(username){
 }
 
 // connect mongoose
+console.log(process.env.API_KEY);
 mongoose.connect(process.env.API_KEY, { useNewUrlParser: true})
 const db = mongoose.connection
 db.on('error', (error) => console.log(error))
