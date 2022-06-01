@@ -2,9 +2,8 @@ const express = require('express')
 const cookieParser = require("cookie-parser")
 const path = require('path')
 const bodyParser = require('body-parser')
-const url = require('url');
 const mongoose = require('mongoose');
-const { log } = require('console');
+require("dotenv").config()
 
 const app = express()
 app.use(express.static(path.join(__dirname, 'frontend/dist')))
