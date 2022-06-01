@@ -26,7 +26,7 @@ async function usernameCheck(username){
 }
 
 // connect mongoose
-mongoose.connect('mongodb+srv://gazerah:gabriel2004@cluster0.nzlp1.mongodb.net/?retryWrites=true&w=majority', { useNewUrlParser: true})
+mongoose.connect(process.env.API_KEY, { useNewUrlParser: true})
 const db = mongoose.connection
 db.on('error', (error) => console.log(error))
 db.once('open', () => console.log("Connected to DB"))
