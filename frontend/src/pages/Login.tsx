@@ -1,4 +1,5 @@
 import * as React from "react";
+import "../style/login.css"
 
 export default () => {
     const [username, setUsername] = React.useState()
@@ -30,9 +31,9 @@ export default () => {
         const data = await response.json()
         console.log(data);
         setLoginMsg(data.msg)
-        // if (data.status == true){
-        //     window.location.href = "/main"
-        // }
+        if (data.status == true){
+            window.location.href = "/"
+        }
     }
     async function register(){
         const response = await fetch('/api/register', {
@@ -47,9 +48,6 @@ export default () => {
         })
         const data = await response.json()
         setLoginMsg(data.msg)
-        // if (data.status == true){
-        //     window.location.href = "/main"
-        // }
     }
     
 
@@ -61,18 +59,18 @@ export default () => {
                     <h5 className="text-center">{loginMsg}</h5>
                     <div className="input-group mb-1">
                         <div className="input-group-prepend">
-                            <span className="input-group-text" id="basic-addon1">@</span>
+                            <span className="input-group-text" id="basic-addon1"><i className="fa-solid fa-user"></i></span>
                         </div>
                         <input onChange={input} name="username" className="form-control" type="text" placeholder="Usuário"/>
                     </div>
                     <div className="input-group mb-1">
                         <div className="input-group-prepend">
-                            <span className="input-group-text" id="basic-addon1">&</span>
+                            <span className="input-group-text" id="basic-addon1"><i className="fa-solid fa-key"></i></span>
                         </div>
                         <input onChange={input} name="password" className="form-control" type="password" placeholder="Senha"/>
                     </div>
                     <button onClick={login} className="btn btn-outline-success btn-block">Entrar</button>
-                    <button onClick={register} className="btn btn-outline-secondary btn-block">Registrar</button>
+                    <button onClick={register} className="mt-1 btn btn-outline-secondary btn-block">Registrar</button>
                 </div>
             </div>
         </div>
