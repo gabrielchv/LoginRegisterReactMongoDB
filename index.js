@@ -3,6 +3,7 @@ const cookieParser = require("cookie-parser")
 const path = require('path')
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose');
+const { log } = require('console');
 require("dotenv").config()
 
 const app = express()
@@ -55,8 +56,17 @@ app.get('/', (req, res) => {
 // main
 app.post('/api/main', async (req, res) => {
   const foundUser = await UserModel.find({id: req.cookies.csrftoken})
-  console.log(foundUser)
-  res.send(foundUser[0].notes)
+  if (Object.keys(foundUser).length == 0){
+    console.log("Usuário não possui csrftoken");
+    res.send({
+      logged: false
+    })
+  }
+  else{
+    res.send({
+      logged: true,
+      data: foundUser[0].notes})
+  }
 }) 
 
 // login
