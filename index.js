@@ -41,7 +41,7 @@ const userSchema = new mongoose.Schema({
   id: String,
   username: String,
   password: String,
-  notes: St
+  notes: [{title: String, text: String}]
 })
 const UserModel = mongoose.model("User", userSchema)
 
@@ -56,7 +56,7 @@ app.get('/', (req, res) => {
 app.post('/api/main', async (req, res) => {
   const foundUser = await UserModel.find({id: req.cookies.csrftoken})
   console.log(foundUser)
-  res.send(foundUser[0])
+  res.send(foundUser[0].notes)
 }) 
 
 // login
@@ -136,6 +136,24 @@ app.post('/api/register', (req, res) => {
     })
     console.log("Dados inválidos")
   }
+})
+
+// Add Note
+app.post('/api/addNote', async (req, res) => {
+  console.log("Nota adicionada")
+  let note = { title: req.body.title, text: req.body.text }
+  let user = await UserModel.findOne({ id: req.cookies.csrftoken }).exec()
+  user.notes.push(note)
+  user.save()
+})
+
+// teste
+app.post('/api/test', async (req, res) => {
+  console.log("FOI")
+  let note = { title: 'hey', text: '2' }
+  let user = await UserModel.findOne({ username: 'gabrielchv' }).exec()
+  user.notes.push(note)
+  user.save()
 })
 
 app.listen(process.env.PORT || 8000, () => {
