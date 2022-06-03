@@ -26,13 +26,18 @@ export default () => {
                 method: "POST"
             })
             const data = await response.json()
-            for (let i = 0; i < Object.keys(data).length; i++) {
-                notesArr.push(<Note title={data[i].title} text={data[i].text}></Note>)
-            }
             return data
         }
         getUserData().then((data) => {
-            setNotes(addNotes())
+            if (!data.logged){
+                window.location.href = "/login"
+            }
+            else{
+                for (let i = 0; i < Object.keys(data.data).length; i++) {
+                    notesArr.push(<Note title={data.data[i].title} text={data.data[i].text}></Note>)
+                }
+                setNotes(addNotes())
+            }
         })
     },[]);
 

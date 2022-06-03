@@ -32,6 +32,7 @@ export default () => {
         console.log(data);
         setLoginMsg(data.msg)
         if (data.status == true){
+            await new Promise(r => setTimeout(r, 1000))
             window.location.href = "/"
         }
     }
