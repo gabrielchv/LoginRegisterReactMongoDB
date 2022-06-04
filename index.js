@@ -3,13 +3,18 @@ const cookieParser = require("cookie-parser")
 const path = require('path')
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose');
-const { log } = require('console');
+const session = require('express-session')
 require("dotenv").config()
 
 const app = express()
 app.use(express.static(path.join(__dirname, 'frontend/dist')))
 app.use(bodyParser.json())
 app.use(cookieParser())
+app.use(session({
+  secret: '3646032321jdjadahsdjkfadaass', // just a long random string
+  resave: false,
+  saveUninitialized: true
+}));
 
 // function to check username or pass lenght
 function checkLenght(text, minLenght, maxLenght){
@@ -55,7 +60,7 @@ app.get('/', (req, res) => {
 
 // main
 app.post('/api/main', async (req, res) => {
-  const foundUser = await UserModel.find({id: req.cookies.csrftoken})
+  const foundUser = await UserModel.find({id: req.sessionID})
   if (Object.keys(foundUser).length == 0){
     console.log("Usuário não possui csrftoken");
     res.send({
@@ -76,13 +81,13 @@ app.post('/api/login', (req, res) => {
       // checar se o usuário já existe
       if (Object.keys(e).length > 0){
         if (e[0].password == req.body.password){
-          UserModel.updateMany({ id: req.cookies.csrftoken },{ id: "" }).then(() => {
-            UserModel.findOneAndUpdate({ username: req.body.username },{ id: req.cookies.csrftoken }).then(() => {
+          UserModel.updateMany({ id: req.sessionID },{ id: "" }).then(() => {
+            UserModel.findOneAndUpdate({ username: req.body.username },{ id: req.sessionID }).then(() => {
               res.send({
                 status: true,
                 msg: "Usuário logado"
               })
-              console.log(req.cookies.csrftoken)
+              console.log(req.sessionID)
               console.log("Usuário logado")
             })
           })
@@ -155,7 +160,7 @@ app.post('/api/register', (req, res) => {
 app.post('/api/addNote', async (req, res) => {
   console.log("Nota adicionada")
   let note = { title: req.body.title, text: req.body.text }
-  let user = await UserModel.findOne({ id: req.cookies.csrftoken }).exec()
+  let user = await UserModel.findOne({ id: req.sessionID }).exec()
   user.notes.push(note)
   user.save()
 })
