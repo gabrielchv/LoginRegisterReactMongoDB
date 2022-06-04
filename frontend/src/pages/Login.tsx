@@ -49,12 +49,6 @@ export default () => {
         const data = await response.json()
         setLoginMsg(data.msg)
     }
-    async function test(){
-        fetch('/api/test', {
-            method: "POST",
-        })
-    }
-    
 
     return(
     <>
@@ -76,7 +70,6 @@ export default () => {
                     </div>
                     <button onClick={login} className="btn btn-outline-success btn-block">Entrar</button>
                     <button onClick={register} className="mt-1 btn btn-outline-secondary btn-block">Registrar</button>
-                    <button onClick={test} className="mt-1 btn btn-outline-danger btn-block">Teste</button>
                 </div>
             </div>
         </div>

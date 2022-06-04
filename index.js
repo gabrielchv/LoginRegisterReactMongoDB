@@ -165,15 +165,6 @@ app.post('/api/addNote', async (req, res) => {
   user.save()
 })
 
-// teste
-app.post('/api/test', async (req, res) => {
-  console.log("FOI")
-  let note = { title: 'hey', text: '2' }
-  let user = await UserModel.findOne({ username: 'gabrielchv' }).exec()
-  user.notes.push(note)
-  user.save()
-})
-
 app.listen(process.env.PORT || 8000, () => {
   console.log(`Listening on port 8000`)
 })
