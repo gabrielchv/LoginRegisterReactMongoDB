@@ -82,6 +82,7 @@ app.post('/api/login', (req, res) => {
                 status: true,
                 msg: "Usuário logado"
               })
+              console.log(req.cookies.csrftoken)
               console.log("Usuário logado")
             })
           })
