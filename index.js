@@ -76,13 +76,15 @@ app.post('/api/login', (req, res) => {
       // checar se o usuário já existe
       if (Object.keys(e).length > 0){
         if (e[0].password == req.body.password){
-          UserModel.updateMany({ id: req.cookies.csrftoken },{ id: "" }).exec()
-          UserModel.findOneAndUpdate({ username: req.body.username },{ id: req.cookies.csrftoken }).exec()
-          res.send({
-            status: true,
-            msg: "Usuário logado"
+          UserModel.updateMany({ id: req.cookies.csrftoken },{ id: "" }).then(() => {
+            UserModel.findOneAndUpdate({ username: req.body.username },{ id: req.cookies.csrftoken }).then(() => {
+              res.send({
+                status: true,
+                msg: "Usuário logado"
+              })
+              console.log("Usuário logado")
+            })
           })
-          console.log("Usuário logado")
         }
         else{
           res.send({
