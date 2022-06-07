@@ -13,7 +13,7 @@ export default (props: any) => {
                     <button id={props.noteId} onClick={handleClick} className="btn btn-outline-danger float-right m-0"><i className="fa-solid fa-trash-can"></i></button>
                 </div>
                 <div className="card-body">
-                    <p>{props.text}</p>
+                    <p className="card-text">{props.text}</p>
                 </div>
             </div>
         </div>

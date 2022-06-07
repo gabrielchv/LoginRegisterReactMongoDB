@@ -18,8 +18,13 @@ app.use(session({
 
 // function to check username or pass lenght
 function checkLenght(text, minLenght, maxLenght){
-  if (text.length >= minLenght && text.length <= maxLenght && text.length){
-    return true
+  if (text.length){
+    if (text.length >= minLenght && text.length <= maxLenght){
+      return true
+    }
+    else{
+      return false
+    }
   }
   else{
     return false
