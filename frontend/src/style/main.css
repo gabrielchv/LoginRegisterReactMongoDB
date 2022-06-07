@@ -1,6 +1,16 @@
 .caixa-input{
     width: 4rem;
 }
-.note{
-    
+.navb{
+    background-color: #FFEF82;
+}
+.notes{
+    margin-bottom: 10rem;
+}
+.title{
+    display: inline;
+    width: max-content;
+}
+nav span{
+    font-weight: 700;
 }

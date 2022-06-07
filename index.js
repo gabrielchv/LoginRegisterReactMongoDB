@@ -3,7 +3,7 @@ const cookieParser = require("cookie-parser")
 const path = require('path')
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose');
-const session = require('express-session')
+const session = require('express-session');
 require("dotenv").config()
 
 const app = express()
@@ -47,7 +47,13 @@ const userSchema = new mongoose.Schema({
   id: String,
   username: String,
   password: String,
-  notes: [{title: String, text: String}]
+  notes: [
+    {
+      noteId: String,
+      title: String, 
+      text: String
+    }
+  ]
 })
 const UserModel = mongoose.model("User", userSchema)
 
@@ -158,11 +164,29 @@ app.post('/api/register', (req, res) => {
 
 // Add Note
 app.post('/api/addNote', async (req, res) => {
-  console.log("Nota adicionada")
-  let note = { title: req.body.title, text: req.body.text }
-  let user = await UserModel.findOne({ id: req.sessionID }).exec()
-  user.notes.push(note)
-  user.save()
+    if (req.body.title.length == 0 || req.body.text.length == 0){
+      console.log("Dados inválidos da note")
+    }
+    else{
+      console.log("Nota adicionada")
+      const note = { title: req.body.title, text: req.body.text, noteId: req.body.noteId}
+      let user = await UserModel.findOne({ id: req.sessionID }).exec()
+      user.notes.push(note)
+      user.save()
+    }
+})
+
+// Delete Note
+app.post('/api/deleteNote', async (req, res) => {
+  console.log("Nota removida: " + req.body.noteId)
+  UserModel.updateOne(
+    { 
+      id: req.sessionID 
+      }, {
+        $pull: {
+          notes: {noteId: req.body.noteId},
+        },
+    }).exec()
 })
 
 app.listen(process.env.PORT || 8000, () => {

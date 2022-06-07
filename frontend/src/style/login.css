@@ -1,6 +1,12 @@
 .login-col{
-    transform: translateY(calc(50vh - 100%));
+    transform: translateY(calc(50vh - 150%));
 }
 i{
     width: 1rem;
+}
+.navb{
+    background-color: #FFEF82;
+}
+nav span{
+    font-weight: 700;
 }
