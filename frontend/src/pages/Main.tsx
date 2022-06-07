@@ -145,7 +145,7 @@ export default () => {
                             </div>
                             <input onKeyDown={enter} onChange={getText} value={title} name="title" type="text" className="form-control"/>
                             <div className="input-group-append">
-                                <button onClick={addNote} className="caixa-input btn btn-outline-secondary" tabIndex="-1" type="button">Criar</button>
+                                <button onClick={addNote} className="btn btn-outline-secondary" tabIndex="-1" type="button">Criar Nota</button>
                             </div>
                         </div>
                         <div className="input-group mb-3">

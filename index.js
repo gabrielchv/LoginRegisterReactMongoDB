@@ -18,16 +18,10 @@ app.use(session({
 
 // function to check username or pass lenght
 function checkLenght(text, minLenght, maxLenght){
-  try{
-    if (text.length >= minLenght && text.length <= maxLenght){
-      return true
-    }
-    else{
-      return false
-    }
+  if (text.length >= minLenght && text.length <= maxLenght && text.length){
+    return true
   }
-  catch (err){
-    console.log('err nos dados')
+  else{
     return false
   }
 }
@@ -66,62 +60,75 @@ app.get('/', (req, res) => {
 
 // main
 app.post('/api/main', async (req, res) => {
-  const foundUser = await UserModel.find({id: req.sessionID})
-  if (Object.keys(foundUser).length == 0){
-    console.log("Usuário não possui csrftoken");
-    res.send({
-      logged: false
-    })
+  if (req.sessionID){
+    const foundUser = await UserModel.find({id: req.sessionID})
+    if (Object.keys(foundUser).length == 0){
+      console.log("Usuário não possui csrftoken");
+      res.send({
+        logged: false
+      })
+    }
+    else{
+      res.send({
+        logged: true,
+        data: foundUser[0].notes})
+    }
   }
-  else{
-    res.send({
-      logged: true,
-      data: foundUser[0].notes})
-  }
+  
 }) 
 
 // login
 app.post('/api/login', (req, res) => {
-  if (checkLenght(req.body.username, 3, 32) && checkLenght(req.body.password, 3, 32)){
-    usernameCheck(req.body.username).then((e) => {
-      // checar se o usuário já existe
-      if (Object.keys(e).length > 0){
-        if (e[0].password == req.body.password){
-          UserModel.updateMany({ id: req.sessionID },{ id: "" }).then(() => {
-            UserModel.findOneAndUpdate({ username: req.body.username },{ id: req.sessionID }).then(() => {
-              res.send({
-                status: true,
-                msg: "Usuário logado"
+  if (req.sessionID){
+    if (checkLenght(req.body.username, 3, 32) && checkLenght(req.body.password, 3, 32)){
+      usernameCheck(req.body.username).then((e) => {
+        // checar se o usuário já existe
+        if (Object.keys(e).length > 0){
+          if (e[0].password == req.body.password){
+            UserModel.updateMany({ id: req.sessionID },{ id: "" }).then(() => {
+              UserModel.findOneAndUpdate({ username: req.body.username },{ id: req.sessionID }).then(() => {
+                res.send({
+                  status: true,
+                  msg: "Usuário logado"
+                })
+                console.log(req.sessionID)
+                console.log("Usuário logado")
               })
-              console.log(req.sessionID)
-              console.log("Usuário logado")
             })
-          })
+          }
+          else{
+            res.send({
+              status: true,
+              msg: "Senha incorreta"
+            })
+            console.log("Senha incorreta")
+          }
         }
         else{
           res.send({
-            status: true,
-            msg: "Senha incorreta"
+            status: false,
+            msg: "Usuário não existente"
           })
-          console.log("Senha incorreta")
+          console.log("Usuário não existente")
         }
-      }
-      else{
-        res.send({
-          status: false,
-          msg: "Usuário não existente"
-        })
-        console.log("Usuário não existente")
-      }
-    })
+      })
+    }
+    // Se dados inválidos
+    else{
+      res.send({
+        status: false,
+        msg: "Dados inválidos"
+      })
+      console.log("Dados inválidos")
+    }
   }
-  // Se dados inválidos
-  else{
+  // não possui session
+  else {
     res.send({
       status: false,
-      msg: "Dados inválidos"
+      msg: "Erro no session"
     })
-    console.log("Dados inválidos")
+    console.log("Erro no session")
   }
 })
 
@@ -164,30 +171,33 @@ app.post('/api/register', (req, res) => {
 
 // Add Note
 app.post('/api/addNote', async (req, res) => {
-    if (req.body.title.length == 0 || req.body.text.length == 0){
-      console.log("Dados inválidos da note")
-    }
-    else{
-      console.log("Nota adicionada")
-      const note = { title: req.body.title, text: req.body.text, noteId: req.body.noteId}
-      let user = await UserModel.findOne({ id: req.sessionID }).exec()
-      user.notes.push(note)
-      user.save()
-    }
+  if (req.body.title.length && req.body.text.length && req.sessionID){
+    console.log("Nota adicionada")
+    const note = { title: req.body.title, text: req.body.text, noteId: req.body.noteId}
+    let user = await UserModel.findOne({ id: req.sessionID }).exec()
+    user.notes.push(note)
+    user.save()
+  }
+  else{
+    console.log("Dados inválidos da note")
+  }
 })
 
 // Delete Note
 app.post('/api/deleteNote', async (req, res) => {
-  console.log("Nota removida: " + req.body.noteId)
-  UserModel.updateOne(
-    { 
-      id: req.sessionID 
-      }, {
-        $pull: {
-          notes: {noteId: req.body.noteId},
-        },
-    }
-  ).exec()
+  if (req.body.noteId){
+    console.log("Nota removida: " + req.body.noteId)
+    UserModel.updateOne(
+      { 
+        id: req.sessionID 
+        }, {
+          $pull: {
+            notes: {noteId: req.body.noteId},
+          },
+      }
+    ).exec()
+  }
+  else console.log("Dados incorretos pra deletar nota")
 })
 
 app.listen(process.env.PORT || 8000, () => {
