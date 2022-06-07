@@ -52,13 +52,6 @@ export default () => {
 
     return(
     <div>
-        <div className="navb">
-                <div className="container">
-                    <nav className="navbar navbar-light">
-                        <span className="navbar-brand">Notes</span>
-                    </nav>
-                </div>
-            </div>
         <div className="container">
             <div className="row">
                 <div className="m-auto login-col col-xl-4 col-lg-6 col-md-8 col-10">
@@ -80,16 +73,6 @@ export default () => {
                 </div>
             </div>
         </div>
-        <footer className="fixed-bottom py-2 w-100">
-                <div className="container">
-                    <div className="mx-auto">
-                        <div className="text-center">
-                            <span><i className="fa-solid fa-user-tie"></i> Autor: Gabriel Chaves &nbsp;</span>
-                            <span><i className="fa-solid fa-copyright"></i> Copyright 2022</span>
-                        </div>
-                    </div>
-                </div>
-            </footer>
     </div>
   );
 }

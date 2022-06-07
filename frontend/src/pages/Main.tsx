@@ -7,7 +7,7 @@ export default () => {
     const [title, setTitle] = React.useState("")
     const [text, setText] = React.useState("")
     const [deleteNoteId, setDeleteNoteId] = React.useState("")
-    const [notesArrKeep, setNotesArrKeep] = React.useState(<p></p>)
+    const [notesArrKeep, setNotesArrKeep] = React.useState(<p>Carregando Notas</p>)
 
     // Add note na arr
     function addNoteArr(newNote: Object){
@@ -136,13 +136,6 @@ export default () => {
 
     return(
         <div>
-            <div className="navb">
-                <div className="container">
-                    <nav className="navbar navbar-light">
-                        <span className="navbar-brand">Notes</span>
-                    </nav>
-                </div>
-            </div>
             <div className="notes container">
                 <div className="row mt-4">
                     <div className="mx-auto col-xl-6 col-md-8 col-12">
@@ -166,16 +159,6 @@ export default () => {
                 
                 {notesArrKeep}
             </div>
-            <footer className="fixed-bottom py-2 w-100">
-                <div className="container">
-                    <div className="mx-auto">
-                        <div className="text-center">
-                            <span><i className="fa-solid fa-user-tie"></i> Autor: Gabriel Chaves &nbsp;</span>
-                            <span><i className="fa-solid fa-copyright"></i> Copyright 2022</span>
-                        </div>
-                    </div>
-                </div>
-            </footer>
         </div>
     )
 }

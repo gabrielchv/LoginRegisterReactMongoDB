@@ -186,7 +186,8 @@ app.post('/api/deleteNote', async (req, res) => {
         $pull: {
           notes: {noteId: req.body.noteId},
         },
-    }).exec()
+    }
+  ).exec()
 })
 
 app.listen(process.env.PORT || 8000, () => {
